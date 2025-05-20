@@ -1,0 +1,115 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- УТРО -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="#FFCCCB"
+            android:padding="8dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="УТРО"
+                android:textSize="60sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnAddMorning"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:text="+"
+                android:backgroundTint="#00C853" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/morningList"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp" />
+
+        <!-- ОБЕД -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="#FFA500"
+            android:padding="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ОБЕД"
+                android:textSize="60sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnAddAfternoon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:text="+"
+                android:backgroundTint="#001753" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/afternoonList"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp" />
+
+        <!-- ВЕЧЕР -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="#2C3E50"
+            android:padding="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ВЕЧЕР"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
+
+
+            <Button
+                android:id="@+id/btnAddEvening"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:text="+"
+                android:backgroundTint="#FFCB53" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/eveningList"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp" />
+
+    </LinearLayout>
+</ScrollView>

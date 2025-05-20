@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_tracker"
+        >
+    <fragment
+        android:id="@+id/exerciseDetailArmsFragment"
+        android:name="com.example.samsung.ui.exercise.ExerciseDetailArmsFragment"
+        android:label="Руки"
+        tools:layout="@layout/fragment_exercise_detail_arms" />
+
+    <fragment
+        android:id="@+id/exerciseDetailHeartFragment"
+        android:name="com.example.samsung.ui.exercise.ExerciseDetailHeartFragment"
+        android:label="Сердце"
+        tools:layout="@layout/fragment_exercise_detail_heart" />
+
+    <fragment
+        android:id="@+id/exerciseDetailRehabFragment"
+        android:name="com.example.samsung.ui.exercise.ExerciseDetailRehabFragment"
+        android:label="Реабилитация"
+        tools:layout="@layout/fragment_exercise_detail_rehab" />
+
+    <!-- Вкладка 1: Трекер приёма таблеток -->
+    <fragment
+        android:id="@+id/navigation_tracker"
+        android:name="com.example.samsung.ui.tracker.TrackerFragment"
+        android:label="Трекер"
+        tools:layout="@layout/fragment_tracker" />
+
+    <!-- Вкладка 2: Физкультура -->
+    <fragment
+        android:id="@+id/navigation_exercise"
+        android:name="com.example.samsung.ui.exercise.ExerciseFragment"
+        android:label="Физкультура"
+        tools:layout="@layout/fragment_exercise" />
+
+    <!-- Вкладка 3: Календарь -->
+    <fragment
+        android:id="@+id/navigation_calendar"
+        android:name="com.example.samsung.ui.calendar.CalendarFragment"
+        android:label="Календарь"
+        tools:layout="@layout/fragment_calendar" />
+
+    <!-- Вкладка 4: Советы -->
+    <fragment
+        android:id="@+id/navigation_advice"
+        android:name="com.example.samsung.ui.advice.AdviceFragment"
+        android:label="Советы"
+        tools:layout="@layout/fragment_advice" />
+
+    <!-- Вкладка 5: Заметки -->
+    <fragment
+        android:id="@+id/navigation_notes"
+        android:name="com.example.samsung.ui.notes.NotesFragment"
+        android:label="Заметки"
+        tools:layout="@layout/fragment_notes" />
+
+</navigation>
