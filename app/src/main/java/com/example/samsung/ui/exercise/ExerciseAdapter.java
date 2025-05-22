@@ -10,6 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.samsung.R;
 import java.util.List;
+import android.widget.ImageView;
+import android.content.Context;
+import android.content.SharedPreferences;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ExerciseViewHolder> {
 
@@ -24,15 +30,41 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
     public ExerciseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_item, parent, false);
         return new ExerciseViewHolder(view);
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull ExerciseViewHolder holder, int position) {
         String title = exerciseList.get(position);
         holder.exerciseTitle.setText(title);
-        holder.selectButton.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(v);
 
+
+        switch (title) {
+            case "Тренировка на руки":
+                holder.exerciseImage.setImageResource(R.drawable.handu);
+                break;
+            case "Зарядка для сердца":
+                holder.exerciseImage.setImageResource(R.drawable.herrt);
+                break;
+            case "Упражнения после инсульта":
+                holder.exerciseImage.setImageResource(R.drawable.jumnujumpu);
+                break;
+            default:
+                holder.exerciseImage.setImageResource(R.drawable.jumnujumpu);
+                break;
+        }
+        holder.selectButton.setOnClickListener(v -> {
+            // Сохраняем дату и название тренировки
+            Context context = v.getContext();
+            SharedPreferences prefs = context.getSharedPreferences("calendar_prefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+
+            String today = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
+            editor.putBoolean("exercise_" + today, true);  // Можно сделать уникальный ключ под дату
+            editor.apply();
+
+            // Переход
+            NavController navController = Navigation.findNavController(v);
             switch (title) {
                 case "Тренировка на руки":
                     navController.navigate(R.id.exerciseDetailArmsFragment);
@@ -46,7 +78,6 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
             }
         });
 
-
     }
 
 
@@ -57,12 +88,16 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
 
     public static class ExerciseViewHolder extends RecyclerView.ViewHolder {
         TextView exerciseTitle;
+        ImageView exerciseImage;
+
         Button selectButton;
 
         public ExerciseViewHolder(@NonNull View itemView) {
             super(itemView);
             exerciseTitle = itemView.findViewById(R.id.exerciseTitle);
             selectButton = itemView.findViewById(R.id.selectButton);
+            exerciseImage = itemView.findViewById(R.id.exerciseImage);
+
 
         }
     }

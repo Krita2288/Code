@@ -1,66 +1,104 @@
 package com.example.samsung.ui.notes;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
+import android.text.InputType;
+import android.view.*;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.example.samsung.R;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NotesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class NotesFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public NotesFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NotesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NotesFragment newInstance(String param1, String param2) {
-        NotesFragment fragment = new NotesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private RecyclerView recyclerView;
+    private NotesAdapter adapter;
+    private List<String> notes = new ArrayList<>();
+    private SharedPreferences prefs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        setHasOptionsMenu(true); // для кнопки "+"
         return inflater.inflate(R.layout.fragment_notes, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        prefs = requireContext().getSharedPreferences("notes_pref", Context.MODE_PRIVATE);
+        notes = new ArrayList<>(prefs.getStringSet("notes", new HashSet<>()));
+
+        recyclerView = view.findViewById(R.id.notesRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new NotesAdapter(notes);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.notes_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_add_note) {
+            showNoteDialog();
+            return true;
+        } else if (id == R.id.action_delete_last) {
+            deleteLastNote();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    private void deleteLastNote() {
+        if (!notes.isEmpty()) {
+            notes.remove(0); // удаляем последнюю добавленную (самую верхнюю)
+            adapter.notifyItemRemoved(0);
+            saveNotes();
+            Toast.makeText(getContext(), "Последняя запись удалена", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "Записей нет", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+    private void showNoteDialog() {
+        EditText input = new EditText(getContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+
+        new AlertDialog.Builder(getContext())
+                .setTitle("Новая запись")
+                .setView(input)
+                .setPositiveButton("Сохранить", (dialog, which) -> {
+                    String text = input.getText().toString().trim();
+                    if (!text.isEmpty()) {
+                        String date = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).format(new Date());
+                        String entry = date + "\n" + text;
+                        notes.add(0, entry);
+                        adapter.notifyItemInserted(0);
+                        saveNotes();
+                    } else {
+                        Toast.makeText(getContext(), "Пустая запись", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Отмена", null)
+                .show();
+    }
+
+    private void saveNotes() {
+        prefs.edit().putStringSet("notes", new HashSet<>(notes)).apply();
     }
 }
